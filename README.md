@@ -45,14 +45,14 @@ The optional `descriptastorus` package is only necessary if you plan to incorpor
 
 Note that on machines with GPUs, you may need to manually install a GPU-enabled version of PyTorch by following the instructions [here](https://pytorch.org/get-started/locally/).
 
-### Option 2: Docker
+### Option 2: Docker on AWS EC2 (EC2_IP=54.91.244.50; port=5000)
 
 Docker provides a nice way to isolate the `chemprop` code and environment. To install and run our code in a Docker container, follow these steps:
 
 1. Install Docker from [https://docs.docker.com/install/](https://docs.docker.com/install/)
 2. `cd /path/to/chemprop`
 3. `docker build -t chemprop .`
-4. `docker run -it chemprop:latest /bin/bash`
+4. `docker run -it -p 5000:5000 chemprop:latest /bin/bash`
 
 Note that you will need to run the latter command with nvidia-docker if you are on a GPU machine in order to be able to access the GPUs. 
 
@@ -75,7 +75,7 @@ Then you can use `import chemprop` or `from chemprop import ...` in your other c
 
 For those less familiar with the command line, we also have a web interface which allows for basic training and predicting. After installing the dependencies following the instructions above, you can start the web interface in two ways:
 
-1. Run `python web/run.py` and then navigate to [localhost:5000](http://localhost:5000) in a web browser. This will start the site in development mode.
+1. Run `cd web; python3 run.py --host=172.17.0.2` and then navigate to [{EC2_IP}:5000](http://54.91.244.50:5000/) in a web browser. This will start the site in development mode.
 2. Run `gunicorn --bind {host}:{port} 'wsgi:build_app()'`. This will start the site in production mode.
    * To run this server in the background, add the `--daemon` flag.
    * Arguments including `init_db` and `demo` can be passed with this pattern: `'wsgi:build_app(init_db=True, demo=True)'` 
